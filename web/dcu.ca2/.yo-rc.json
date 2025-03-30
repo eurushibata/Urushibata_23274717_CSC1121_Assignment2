@@ -1,0 +1,17 @@
+{
+  "generator-ui5-app": {
+    "namespace": "dcu.ca2",
+    "framework": "OpenUI5",
+    "frameworkVersion": "1.134.0",
+    "author": "Emerson Urushibata",
+    "initrepo": true,
+    "appId": "dcu.ca2",
+    "appURI": "dcu/ca2",
+    "cdnDomain": "sdk.openui5.org",
+    "defaultTheme": "sap_horizon",
+    "qunitCoverageFile": "qunit-coverage-istanbul.js",
+    "gte1_98_0": true,
+    "gte1_104_0": true,
+    "lt1_124_0": false
+  }
+}
