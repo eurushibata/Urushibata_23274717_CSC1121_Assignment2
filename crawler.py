@@ -5,9 +5,11 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 WIKIPEDIA_URL = "https://en.wikipedia.org/wiki/Special:Random"
-IMAGE_COUNT = 1
+IMAGE_COUNT = 10
 DATASET_FOLDER = "dataset"
 FILE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif")
+MIN_HEIGHT = 200
+MIN_WIDTH = 200
 
 # Wikipedia images varies in size and extraction doesn't diferentiate between icons, flags, small images.
 # in my scenario I am mostly interested in images of at least 200x200 pixels and 1 image per topic.
@@ -17,7 +19,7 @@ def extract_images_from_url(url):
     images = []
     for img in soup.find_all('img'):
         img_url = urljoin(url, img['src'])
-        if img_url.endswith(FILE_EXTENSIONS):
+        if img_url.endswith(FILE_EXTENSIONS) and int(img['height']) >= MIN_HEIGHT and int(img['width']) >= MIN_WIDTH:
             images.append(img_url)
     return images
 
