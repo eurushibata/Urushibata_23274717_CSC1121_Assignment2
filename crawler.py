@@ -8,8 +8,8 @@ WIKIPEDIA_URL = "https://en.wikipedia.org/wiki/Special:Random"
 IMAGE_COUNT = 10
 DATASET_FOLDER = "dataset"
 FILE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif")
-MIN_HEIGHT = 200
-MIN_WIDTH = 200
+MIN_HEIGHT = 150
+MIN_WIDTH = 150
 
 # Wikipedia images varies in size and extraction doesn't diferentiate between icons, flags, small images.
 # in my scenario I am mostly interested in images of at least 200x200 pixels and 1 image per topic.
@@ -34,6 +34,9 @@ def create_dataset_folder():
 def save_images(images):
     for img_url in images:
         download_image(img_url, DATASET_FOLDER)
+
+def save_image(img_url):
+    download_image(img_url, DATASET_FOLDER)
         
 def download_image(img_url, folder):
     try:
@@ -52,14 +55,17 @@ def download_image(img_url, folder):
 
 def main():
     create_dataset_folder()
-    urls_fetched = set()
+    images_fetched = set()
     
-    while len(urls_fetched) < IMAGE_COUNT:
+    while len(images_fetched) < IMAGE_COUNT:
         url = fetch_random_wikipedia_url()
-        if url not in urls_fetched:
-            urls_fetched.add(url)
-            images = extract_images_from_url(url)
-            save_images(images)
+        # if url not in urls_fetched:
+        # urls_fetched.add(url)
+        images = extract_images_from_url(url)
+        if (images):
+            for img_url in images:
+                images_fetched.add(img_url)
+                save_image(img_url)
 
 if __name__ == "__main__":
     main()
