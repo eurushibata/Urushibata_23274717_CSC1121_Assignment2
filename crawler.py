@@ -42,7 +42,7 @@ def get_page_info(url):
         if 'original' in page_info:
             page_id = page_info['pageid']
             image_url = page_info['original']['source']
-            content = page_content.find('div', id='mw-content-text').findAll('p')
+            content = page_content.find('div', id='mw-content-text').find_all('p')
             # print(f"Image URL: {image_url}")
             return {
                 "page_id": page_id,
