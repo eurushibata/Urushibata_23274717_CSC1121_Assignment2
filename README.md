@@ -29,5 +29,5 @@ source myenv/bin/activate
 
 to start service with gunicorn
 ```
-gunicorn -w 1 app:app
+gunicorn -w 2 app:app --daemon
 ```

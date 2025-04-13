@@ -107,14 +107,14 @@ def download_image(img_url, folder, retry_count=0):
 
 def save_record_to_file(record, filename):
     page_id = record['page_id']
-    title = record['title'].replace('&', '&amp;')
-    image_url = record['image_url'].replace('&', '&amp;')
-    image_name = record['image_name'].replace('&', '&amp;')
-    wikipedia_source_url = record['wikipedia_source_url'].replace('&', '&amp;')
-    # content = record['content'].replace('&', '&amp;')
+    title = record['title'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    image_url = record['image_url'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    image_name = record['image_name'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    wikipedia_source_url = record['wikipedia_source_url'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    # content = record['content'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
     content_text = ""
     for paragraph in record['content']:
-        content_text += paragraph.text.replace('&', '&amp;') + "\n"
+        content_text += paragraph.text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;') + "\n"
 
     
     
