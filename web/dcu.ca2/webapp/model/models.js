@@ -6,6 +6,16 @@ sap.ui.define(["sap/ui/model/json/JSONModel", "sap/ui/model/BindingMode", "sap/u
 			const oModel = new JSONModel(Device);
 			oModel.setDefaultBindingMode(BindingMode.OneWay);
 			return oModel;
+		},
+
+		createLocalModel: function () {
+			const oModel = new JSONModel({
+				total: 0,
+				timeSpent: 0,
+				busy: false,
+				results: []
+			});
+			return oModel;
 		}
 	};
 });

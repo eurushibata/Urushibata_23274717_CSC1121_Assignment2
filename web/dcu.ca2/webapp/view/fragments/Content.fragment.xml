@@ -1,15 +1,16 @@
 <core:FragmentDefinition
-	xmlns:m="sap.m"
-	xmlns="sap.uxap"
+	xmlns="sap.m"
+	xmlns:uxap="sap.uxap"
 	xmlns:core="sap.ui.core">
-	<ObjectPageSection showTitle="false" visible="{= !${/selectedPurchase} }">
-		<subSections>
-			<ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
-				<m:IllustratedMessage
+	<uxap:ObjectPageSection showTitle="false" visible="{= !${/selectedPurchase} }">
+		<uxap:subSections>
+			<uxap:ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
+				<Text text="{/timeSpent}" />
+				<IllustratedMessage
 					illustrationType="{= ${/inputPopulated} ? 'sapIllus-ErrorScreen' : 'sapIllus-SearchFolder' }"
-					title="{= ${/inputPopulated} ? ${i18n>NotFoundTitle} : ${i18n>EnterPurchaseTitle} }"
-					description="{= ${/inputPopulated} ? ${i18n>NotFoundDescription} : ${i18n>EnterPurchaseDescription} }"/>
-			</ObjectPageSubSection>
-		</subSections>
-	</ObjectPageSection>
+					title="No Results"
+					description="No images were found with your search criteria"/>
+			</uxap:ObjectPageSubSection>
+		</uxap:subSections>
+	</uxap:ObjectPageSection>
 </core:FragmentDefinition>

@@ -13,6 +13,8 @@ sap.ui.define(["sap/ui/core/UIComponent", "sap/ui/Device", "./model/models"], fu
 			// create the device model
 			this.setModel(models.createDeviceModel(), "device");
 
+			this.setModel(models.createLocalModel());
+
 			// create the views based on the url/hash
 			this.getRouter().initialize();
 		},

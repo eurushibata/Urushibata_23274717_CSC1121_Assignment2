@@ -29,8 +29,8 @@
   </Page> -->
   <uxap:ObjectPageLayout
     id="ObjectPageLayout"
-    showHeaderContent="{= !!${/selectedPurchase} }"
-    toggleHeaderOnTitleClick="{= !!${/selectedPurchase} }"
+    showHeaderContent="{= !!${/results} }"
+    toggleHeaderOnTitleClick="{= !!${/results} }"
     upperCaseAnchorBar="false">
 
     <uxap:headerTitle>

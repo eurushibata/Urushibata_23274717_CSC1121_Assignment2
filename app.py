@@ -40,6 +40,24 @@ def search(algo, query):
   
   return response
 
+@app.route("/dataset")
+def dataset():
+    dataset_path = os.path.join(app.root_path, 'dataset/0.wikipedia.images.json')
+    try:
+        with open(dataset_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)  # Load JSON content
+        return app.response_class(
+            response=json.dumps(data, indent=2, ensure_ascii=False),
+            status=200,
+            mimetype='application/json'
+        )
+    except FileNotFoundError:
+        return Response(
+            "Dataset file not found",
+            status=404,
+            mimetype='text/plain'
+        )
+
 
 @app.route('/<path:filename>')
 def serve_static_file(filename):
