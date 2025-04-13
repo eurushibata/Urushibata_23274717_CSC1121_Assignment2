@@ -35,13 +35,19 @@ def get_page_info(url):
     response = requests.get(url)
     data = response.json()
     # print (data['query']['pages'])
+    if not hasattr(data, 'query'):
+        return None
+    if not hasattr(data['query'], 'pages'):
+        return None
     page_data = data['query']['pages']
     for page_id, page_info in page_data.items():
         if 'original' in page_info:
+            page_id = page_info['pageid']
             image_url = page_info['original']['source']
             content = page_content.find('div', id='mw-content-text').findAll('p')
             # print(f"Image URL: {image_url}")
             return {
+                "page_id": page_id,
                 "image_url": image_url,
                 "image_name": os.path.basename(image_url),
                 "wikipedia_source_url": url,
@@ -93,7 +99,8 @@ def download_image(img_url, folder, retry_count=0):
     except Exception as e:
         print(f"Failed to download {img_url}: {e}")
 
-def save_record_to_file(record, index, filename):
+def save_record_to_file(record, filename):
+    page_id = record['page_id']
     title = record['title']
     image_url = record['image_url']
     image_name = record['image_name']
@@ -104,7 +111,7 @@ def save_record_to_file(record, index, filename):
     
     with open(filename, 'a', encoding='utf-8') as file:
         file.write("<doc>\n")
-        file.write(f"<docno>{index}</docno>\n")
+        file.write(f"<docno>{page_id}</docno>\n")
         file.write(f"<title>{title}</title>\n")
         file.write(f"<img_loc>{image_name}</img_loc>\n")
         file.write(f"<bib>{wikipedia_source_url}</bib>\n")
@@ -142,7 +149,7 @@ def main():
                 save_image(content['image_url'])
                 images_fetched.add(content['image_url'])
                 # print(f"Downloaded: {image_url}")
-                save_record_to_file(content, len(images_fetched), "0.wikipedia.images.xml")
+                save_record_to_file(content, "0.wikipedia.images.xml")
                 content['docno'] = len(images_fetched)
                 images_fetched_json.append(content)
                 bar.next()
