@@ -15,15 +15,15 @@
 					<Text text="{/timeSpent}" />
 					<Text text="records found matching the search criteria: {/total}" />
 					<List
-						headerText="Products"
-						binding="{/results}" >
+						headerText="Products {= ${/results}.length }"
+						items="{/results}" >
 						<StandardListItem
-							title="{/title}"
-							description="{/content}"
-							icon="{/image_name}"
+							title="{title}"
+							description="{content}"
+							icon="/images/{image_name}"
 							custom:url="{
 								key: 'image',
-								value: '{/wikipedia_source_url}'
+								value: '{wikipedia_source_url}'
 							}"
 							press="onPress"
 							iconDensityAware="false"
