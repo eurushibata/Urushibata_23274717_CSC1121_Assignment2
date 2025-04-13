@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import argparse
 import os
 import requests
 from bs4 import BeautifulSoup
@@ -8,7 +9,7 @@ import time
 import json
 
 WIKIPEDIA_URL = "https://en.wikipedia.org/wiki/Special:Random"
-IMAGE_COUNT = 5000
+IMAGE_COUNT = 20
 DATASET_FOLDER = "dataset"
 # FILE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif")
 
@@ -31,8 +32,8 @@ def get_page_info(url):
     # print (title_text)
 
     # now that we have the title we can query the Wikipedia API
-    url = IMAGE_QUERY_URL + title_text
-    response = requests.get(url)
+    request_url = IMAGE_QUERY_URL + title_text
+    response = requests.get(request_url)
     data = response.json()
     # print (data['query']['pages'])
     if not 'query' in data:
@@ -42,6 +43,13 @@ def get_page_info(url):
         if 'original' in page_info:
             page_id = page_info['pageid']
             image_url = page_info['original']['source']
+            image_name = os.path.basename(image_url)
+
+            # Skip if image file too long as python cannot handle it and I won't be creating a mapping for files
+            if len(image_name) > 255:
+                # print(f"Image name too long: {image_name}")
+                return None
+
             content = page_content.find('div', id='mw-content-text').find_all('p')
             # print(f"Image URL: {image_url}")
             return {
@@ -118,6 +126,18 @@ def save_record_to_file(record, filename):
             file.write(paragraph.text + "\n")
         file.write(f"</text>\n")    
         file.write("</doc>\n")
+        file.close()
+
+def read_record_from_json_file(filename):
+    filename = os.path.join(DATASET_FOLDER, filename)
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            records = json.load(file)
+            return records
+    except FileNotFoundError:
+        # Return an empty list if the file does not exist
+        return []
+
 
 def save_record_to_file_json(records, filename):
     # prepare content
@@ -127,18 +147,22 @@ def save_record_to_file_json(records, filename):
             content_text+= paragraph.text + "\n"
         record['content'] = content_text
 
+    # file will be merged with existing json file
+    previous_records = read_record_from_json_file(filename)
+
     filename = os.path.join(DATASET_FOLDER, filename)
 
     with open(filename, 'w', encoding='utf-8') as file:
-        json.dump(records, file, indent=2, ensure_ascii=False)
+        json.dump(previous_records + records, file, indent=2, ensure_ascii=False)
 
-def main():
-    bar = IncrementalBar('Downloading', max=IMAGE_COUNT)
+def main(n=IMAGE_COUNT):
+    bar = IncrementalBar('Downloading', max=n)
     create_dataset_folder()
     images_fetched = set()
     images_fetched_json = []
+    export_file_name = "0.wikipedia.images.xml"
     
-    while len(images_fetched) < IMAGE_COUNT:
+    while len(images_fetched) < n:
         url = fetch_random_wikipedia_article()
         # print(f"Fetching URL: {url}")
         content = get_page_info(url)
@@ -147,12 +171,21 @@ def main():
                 save_image(content['image_url'])
                 images_fetched.add(content['image_url'])
                 # print(f"Downloaded: {image_url}")
-                save_record_to_file(content, "0.wikipedia.images.xml")
-                content['docno'] = len(images_fetched)
+                save_record_to_file(content, export_file_name)
                 images_fetched_json.append(content)
                 bar.next()
     save_record_to_file_json(images_fetched_json, "0.wikipedia.images.json")
     bar.finish()
 
 if __name__ == "__main__":
-    main()
+    print("===================================================")
+    print("Image Retrieval - Crawl Wikipedia Images")
+    print("===================================================")
+    print("Author: Emerson Takeshi Urushibata")
+
+
+    parser=argparse.ArgumentParser(description="sample argument parser")
+    parser.add_argument("n", help="Quantity of images to fetch",)
+    args=parser.parse_args()
+
+    main(int(args.n))
