@@ -1,4 +1,5 @@
-# implement BM25 algorithm
+#!/usr/bin/env python
+# # implement BM25 algorithm
 from corpus_indexer import CorpusIndexer
 import math
 import argparse

@@ -1,4 +1,5 @@
-# implement ranking vector space model using cosine similarity
+#!/usr/bin/env python
+# # implement ranking vector space model using cosine similarity
 from corpus_indexer import CorpusIndexer
 from datetime import datetime
 import argparse
