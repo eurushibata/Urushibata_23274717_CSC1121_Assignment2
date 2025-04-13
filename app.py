@@ -47,4 +47,4 @@ def serve_static_file(filename):
     return send_from_directory(static_dir, filename)
 
 if __name__ == "__main__":
-  app.run(debug=True)
+  app.run(debug=True, port=8004)

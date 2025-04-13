@@ -13,3 +13,21 @@ pip install -r requirements.txt
 ```
 flask run
 ```
+
+
+on 
+```
+/home/urushibata.com.br/dcu
+```
+
+needs to run the bellow before running pip install -r requirements
+
+```
+source myenv/bin/activate
+```
+
+
+to start service with gunicorn
+```
+gunicorn -w 1 app:app
+```
