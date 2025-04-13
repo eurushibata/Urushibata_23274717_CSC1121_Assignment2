@@ -35,7 +35,6 @@ def get_page_info(url):
     response = requests.get(url)
     data = response.json()
     # print (data['query']['pages'])
-    print(data)
     if not 'query' in data:
         return None
     page_data = data['query']['pages']
