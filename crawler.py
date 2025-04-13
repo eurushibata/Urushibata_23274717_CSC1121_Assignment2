@@ -107,11 +107,16 @@ def download_image(img_url, folder, retry_count=0):
 
 def save_record_to_file(record, filename):
     page_id = record['page_id']
-    title = record['title']
-    image_url = record['image_url']
-    image_name = record['image_name']
-    wikipedia_source_url = record['wikipedia_source_url']
-    content = record['content']
+    title = record['title'].replace('&', '&amp;')
+    image_url = record['image_url'].replace('&', '&amp;')
+    image_name = record['image_name'].replace('&', '&amp;')
+    wikipedia_source_url = record['wikipedia_source_url'].replace('&', '&amp;')
+    # content = record['content'].replace('&', '&amp;')
+    content_text = ""
+    for paragraph in record['content']:
+        content_text += paragraph.text.replace('&', '&amp;') + "\n"
+
+    
     
     filename = os.path.join(DATASET_FOLDER, filename)
     
@@ -122,8 +127,9 @@ def save_record_to_file(record, filename):
         file.write(f"<img_loc>{image_name}</img_loc>\n")
         file.write(f"<bib>{wikipedia_source_url}</bib>\n")
         file.write(f"<text>{title}\n")
-        for paragraph in content:
-            file.write(paragraph.text + "\n")
+        file.write(f"{content_text}\n")
+        # for paragraph in content:
+        #     file.write(paragraph.text + "\n")
         file.write(f"</text>\n")    
         file.write("</doc>\n")
         file.close()

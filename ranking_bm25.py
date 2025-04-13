@@ -1,6 +1,7 @@
 # implement BM25 algorithm
 from corpus_indexer import CorpusIndexer
 import math
+import argparse
 
 class RankingBM25:
   def __init__(self, collection):
@@ -39,13 +40,25 @@ class RankingBM25:
     return round(tf/(tf + k*(1-b)+b*(N/avgdl)) * idf, 4)
 
 if __name__ == "__main__":
+  print("===================================================")
+  print("Search Engine - Vector Space Model")
+  print("===================================================")
+  print("Author: Emerson Takeshi Urushibata")
+
+
+  parser=argparse.ArgumentParser(description="sample argument parser")
+  parser.add_argument("keywords", help="Search Keywords")
+  args=parser.parse_args()
+
   # for testing purpose, define the collection size
   # limit = 1000 # any number or None
   limit = None
   collection = CorpusIndexer('./dataset/0.wikipedia.images.xml', limit)
   ranking_bm25 = RankingBM25(collection)
-
-
-  res = ranking_bm25.query('Parliamentary elections')
-  print(res)
+  
+  similarity = ranking_bm25.query(args.keywords)
+  print(f"Searching for {args.keywords}")
+  print("===================================================")
+  print("Results:")
+  print(similarity)
 

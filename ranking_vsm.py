@@ -1,6 +1,7 @@
 # implement ranking vector space model using cosine similarity
 from corpus_indexer import CorpusIndexer
 from datetime import datetime
+import argparse
 
 class RankingVSM:
   def __init__(self, collection):
@@ -73,11 +74,24 @@ class RankingVSM:
     return relevance_judgement_rank
 
 if __name__ == "__main__":
+  print("===================================================")
+  print("Search Engine - Vector Space Model")
+  print("===================================================")
+  print("Author: Emerson Takeshi Urushibata")
+
+
+  parser=argparse.ArgumentParser(description="sample argument parser")
+  parser.add_argument("keywords", help="Search Keywords")
+  args=parser.parse_args()
+
   # for testing purpose, define the collection size
   # limit = 3 # any number or None
   limit = None
   collection = CorpusIndexer('./dataset/0.wikipedia.images.xml', limit)
   ranking_vsb = RankingVSM(collection)
 
-  similarity = ranking_vsb.query('Parliamentary elections')
+  similarity = ranking_vsb.query(args.keywords)
+  print(f"Searching for {args.keywords}")
+  print("===================================================")
+  print("Results:")
   print(similarity)
