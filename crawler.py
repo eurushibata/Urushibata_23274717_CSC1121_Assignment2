@@ -35,9 +35,8 @@ def get_page_info(url):
     response = requests.get(url)
     data = response.json()
     # print (data['query']['pages'])
-    if not hasattr(data, 'query'):
-        return None
-    if not hasattr(data['query'], 'pages'):
+    print(data)
+    if not 'query' in data:
         return None
     page_data = data['query']['pages']
     for page_id, page_info in page_data.items():
