@@ -1,15 +1,65 @@
 <core:FragmentDefinition
 	xmlns="sap.m"
+	xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
 	xmlns:uxap="sap.uxap"
 	xmlns:core="sap.ui.core">
 	<uxap:ObjectPageSection showTitle="false" visible="{= !${/selectedPurchase} }">
 		<uxap:subSections>
 			<uxap:ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
-				<Text text="{/timeSpent}" />
 				<IllustratedMessage
+					visible="{= ${/total} === 0}"
 					illustrationType="{= ${/inputPopulated} ? 'sapIllus-ErrorScreen' : 'sapIllus-SearchFolder' }"
 					title="No Results"
 					description="No images were found with your search criteria"/>
+				<VBox visible="{= ${/total} > 0}">
+					<Text text="{/timeSpent}" />
+					<Text text="records found matching the search criteria: {/total}" />
+					<List
+						headerText="Products"
+						binding="{/results}" >
+						<StandardListItem
+							title="{/title}"
+							description="{/content}"
+							icon="{/image_name}"
+							custom:url="{
+								key: 'image',
+								value: '{/wikipedia_source_url}'
+							}"
+							press="onPress"
+							iconDensityAware="false"
+							iconInset="false"
+							type="Navigation" />
+					</List>
+
+
+
+
+
+
+
+					<!-- <Table >
+						<columns>
+							<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
+								<Text text="Image" />
+							</Column>
+							<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
+								<Text text="Description" />
+							</Column>
+							<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
+								<Text text="GO TO" />
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem type="Navigation" press="onPress">
+								<cells>
+									<ObjectIdentifier title="{image}" />
+									<ObjectStatus text="{description}" />
+									<Button text="Go to" press="onPress"/>
+								</cells>
+							</ColumnListItem>
+							</items>	
+					</Table> -->
+			</VBox>
 			</uxap:ObjectPageSubSection>
 		</uxap:subSections>
 	</uxap:ObjectPageSection>

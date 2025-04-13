@@ -10,6 +10,7 @@ sap.ui.define(["sap/ui/model/json/JSONModel", "sap/ui/model/BindingMode", "sap/u
 
 		createLocalModel: function () {
 			const oModel = new JSONModel({
+				dataset: [],
 				total: 0,
 				timeSpent: 0,
 				busy: false,
