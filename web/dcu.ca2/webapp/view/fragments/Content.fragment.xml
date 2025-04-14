@@ -15,6 +15,8 @@
 					<Text text="{/timeSpent}" />
 					<Text text="records found matching the search criteria: {/total}" />
 					<List
+						growing="true"
+						growingThreshold="10"
 						headerText="Products {= ${/results}.length }"
 						items="{/results}" >
 						<StandardListItem
@@ -30,35 +32,6 @@
 							iconInset="false"
 							type="Navigation" />
 					</List>
-
-
-
-
-
-
-
-					<!-- <Table >
-						<columns>
-							<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
-								<Text text="Image" />
-							</Column>
-							<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
-								<Text text="Description" />
-							</Column>
-							<Column width="10rem" minScreenWidth="Tablet" demandPopin="true">
-								<Text text="GO TO" />
-							</Column>
-						</columns>
-						<items>
-							<ColumnListItem type="Navigation" press="onPress">
-								<cells>
-									<ObjectIdentifier title="{image}" />
-									<ObjectStatus text="{description}" />
-									<Button text="Go to" press="onPress"/>
-								</cells>
-							</ColumnListItem>
-							</items>	
-					</Table> -->
 			</VBox>
 			</uxap:ObjectPageSubSection>
 		</uxap:subSections>
