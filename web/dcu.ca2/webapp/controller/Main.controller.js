@@ -60,6 +60,11 @@ sap.ui.define([
 			this.getModel().setProperty("/ranking", relevant_docs);
 			this.getModel().setProperty("/results", query_results);
 			this.getModel().setProperty("/timeSpent", (end - start)/1000 + " seconds");
+		},
+
+		onImagePress: function (oEvent) {
+			const url = this.getModel().getProperty(`${oEvent.getSource().getBindingContext().getPath()}/wikipedia_source_url`);
+			window.open(url, "_blank");
 		}
 	});
 });

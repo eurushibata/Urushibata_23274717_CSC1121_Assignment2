@@ -21,7 +21,7 @@
 			singleContainerFullSize="false">
 			<f:content>
 				<Label text="Search keywords" />
-				<Input id="search_text" value="123" />
+				<Input id="search_text" value="" />
 				<Button type="Emphasized" text="Search" width="5rem" press=".onSearchPress"></Button>
 				<Label text="Search Algorithm" />
 				<SegmentedButton id="search_algorithm" selectedKey="bm25" class="sapUiSmallMarginBottom">

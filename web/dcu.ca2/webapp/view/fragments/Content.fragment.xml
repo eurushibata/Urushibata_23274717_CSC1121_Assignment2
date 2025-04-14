@@ -25,7 +25,7 @@
 								key: 'image',
 								value: '{wikipedia_source_url}'
 							}"
-							press="onPress"
+							press=".onImagePress"
 							iconDensityAware="false"
 							iconInset="false"
 							type="Navigation" />
