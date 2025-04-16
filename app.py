@@ -26,8 +26,10 @@ def hello():
   return render_template("index-cdn.html", message=message)
 
 @app.route("/search/<algo>/<query>")
+
 def search(algo, query):
   ranking = None
+  
   if (algo == "bm25"):
     ranking = ranking_bm25.query(query)
   elif (algo == "vsm"):
