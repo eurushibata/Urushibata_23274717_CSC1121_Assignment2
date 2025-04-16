@@ -10,9 +10,17 @@ from multiprocessing import Pool
 app = Flask(__name__,
              template_folder='web/dcu.ca2/webapp')
 
-ranking_bm25  = None
-ranking_vsm    = None
-ranking_vsm_q  = None
+def initialize_rankings():
+    global ranking_bm25, ranking_vsm, ranking_vsm_q  # Declare as global to modify them
+    processes_pool = Pool(5)
+    collection = CorpusIndexer('./dataset/0.wikipedia.images.xml')
+
+    # Create a pool of processes
+    ranking_classes = [RankingBM25, RankingVSM, RankingVSM_Q]
+    args = [(cls, collection) for cls in ranking_classes]
+    rankings = processes_pool.map(initialize_ranking, args)
+
+    ranking_bm25, ranking_vsm, ranking_vsm_q = rankings
 
 @app.route("/")
 def hello():
@@ -73,16 +81,6 @@ def initialize_ranking(args):
     return ranking_class(collection)
 
 if __name__ == "__main__":
-  processes_pool = Pool(5)
-  # read files and prepare structure for engine optimization
-  collection = CorpusIndexer('./dataset/0.wikipedia.images.xml')
-
-  # Create a pool of processes
-  ranking_classes = [RankingBM25, RankingVSM, RankingVSM_Q]
-  args = [(cls, collection) for cls in ranking_classes]
-  rankings = processes_pool.map(initialize_ranking, args)
-
-  ranking_bm25, ranking_vsm, ranking_vsm_q = rankings
-
+  initialize_rankings()
 
   app.run(debug=True, port=8005)
