@@ -29,7 +29,7 @@
 						<StandardListItem
 							title="{title} (Ranking Score: {= ${rankingPos} })"
 							description="{content}"
-							icon="/images/{image_name}"
+							icon="/images/{new_image_name}"
 							custom:url="{
 								key: 'image',
 								value: '{wikipedia_source_url}'

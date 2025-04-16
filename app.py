@@ -8,6 +8,8 @@ from corpus_indexer import CorpusIndexer
 from crawler import crawler
 
 app = Flask(__name__,
+            static_url_path="/images",
+            static_folder="dataset",
              template_folder='web/dcu.ca2/webapp')
 
 def initialize_rankings():
@@ -54,11 +56,18 @@ def search(algo, query):
 
 @app.route("/crawler/<no>")
 def crawler2(no):
-   crawler(int(no))
+  crawler(int(no))
+  return Response(f"${no} images added successfully. Now you have to flush the model with /flush", status=200)
 
 @app.route("/flush")
 def flush():
-   initialize_rankings()
+  initialize_rankings()
+  return Response("Model Flushed successfully.", status=200)
+
+@app.route('/images/<path:path>')
+def send_report(path):
+    # Using request args for path will expose you to directory traversal attacks
+    return send_from_directory('images', path)
 
 
 @app.route("/dataset")
@@ -89,7 +98,7 @@ def initialize_ranking(args):
     ranking_class, collection = args
     return ranking_class(collection)
 
-# initialize_rankings()
+initialize_rankings()
 
 # it is ignored by gunicorn
 if __name__ == "__main__":
