@@ -35,3 +35,11 @@ to start service with gunicorn
 ```
 gunicorn -w 1 app:app --daemon --log-file 1.logfile.log --reload
 ```
+
+
+
+
+sudo systemctl restart gunicorn
+sudo systemctl daemon-reload
+sudo systemctl restart gunicorn.socket gunicorn.service
+sudo nginx -t && sudo systemctl restart nginx

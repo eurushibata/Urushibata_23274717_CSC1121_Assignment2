@@ -52,6 +52,12 @@ def search(algo, query):
   
   return response
 
+
+@app.route("/flush")
+def flush():
+   initialize_rankings()
+
+
 @app.route("/dataset")
 def dataset():
     dataset_path = os.path.join(app.root_path, 'dataset/0.wikipedia.images.json')
@@ -80,7 +86,7 @@ def initialize_ranking(args):
     ranking_class, collection = args
     return ranking_class(collection)
 
-initialize_rankings()
+# initialize_rankings()
 
 # it is ignored by gunicorn
 if __name__ == "__main__":
