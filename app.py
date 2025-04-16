@@ -12,15 +12,11 @@ app = Flask(__name__,
 
 def initialize_rankings():
     global ranking_bm25, ranking_vsm, ranking_vsm_q  # Declare as global to modify them
-    processes_pool = Pool(5)
     collection = CorpusIndexer('./dataset/0.wikipedia.images.xml')
 
-    # Create a pool of processes
-    ranking_classes = [RankingBM25, RankingVSM, RankingVSM_Q]
-    args = [(cls, collection) for cls in ranking_classes]
-    rankings = processes_pool.map(initialize_ranking, args)
-
-    ranking_bm25, ranking_vsm, ranking_vsm_q = rankings
+    ranking_bm25 = RankingBM25(collection)
+    ranking_vsm = RankingVSM(collection)
+    ranking_vsm_q = RankingVSM_Q(collection)
 
 @app.route("/")
 def hello():
