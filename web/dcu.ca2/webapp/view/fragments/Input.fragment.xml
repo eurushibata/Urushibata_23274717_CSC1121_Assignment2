@@ -26,10 +26,13 @@
 				<Label text="Search Algorithm" />
 				<SegmentedButton id="search_algorithm" selectedKey="bm25" class="sapUiSmallMarginBottom">
 					<items>
-						<SegmentedButtonItem text="VSM" key="vsm" />
-						<SegmentedButtonItem text="BM25" key="bm25" />
+						<SegmentedButtonItem width="5rem" text="VSM" key="vsm" />
+						<SegmentedButtonItem width="5rem" text="VSM_Q" key="vsm_q" />
+						<SegmentedButtonItem width="5rem" text="BM25" key="bm25" />
 					</items>
 				</SegmentedButton>
+				<Text id="countdownText" visible="false" text="{/realtimeCountdown} seconds" />
+				<Text text="records found matching the search criteria: {/total}" />
 			</f:content>
 		</f:SimpleForm>
 	</VBox>

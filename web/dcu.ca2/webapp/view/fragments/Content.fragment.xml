@@ -6,21 +6,28 @@
 	<uxap:ObjectPageSection showTitle="false" visible="{= !${/selectedPurchase} }">
 		<uxap:subSections>
 			<uxap:ObjectPageSubSection class="sapUxAPObjectPageSubSectionFitContainer">
+      <ScrollContainer height="100%" horizontal="false" vertical="true">
 				<IllustratedMessage
 					visible="{= ${/total} === 0}"
 					illustrationType="{= ${/inputPopulated} ? 'sapIllus-ErrorScreen' : 'sapIllus-SearchFolder' }"
 					title="No Results"
 					description="No images were found with your search criteria"/>
 				<VBox visible="{= ${/total} > 0}">
-					<Text text="{/timeSpent}" />
-					<Text text="records found matching the search criteria: {/total}" />
+					<!-- <Text text="{/timeSpent}" /> -->
 					<List
 						growing="true"
 						growingThreshold="10"
-						headerText="Products {= ${/results}.length }"
-						items="{/results}" >
+						growingScrollToLoad="true"
+						headerText="Images {= ${/results}.length }"
+						items="{
+							path: '/results',
+							sorter: {
+									path: 'rankingPos',
+									descending: true
+							}
+					}">
 						<StandardListItem
-							title="{title}"
+							title="{title} (Ranking Score: {= ${rankingPos} })"
 							description="{content}"
 							icon="/images/{image_name}"
 							custom:url="{
@@ -33,6 +40,8 @@
 							type="Navigation" />
 					</List>
 			</VBox>
+
+		</ScrollContainer>
 			</uxap:ObjectPageSubSection>
 		</uxap:subSections>
 	</uxap:ObjectPageSection>

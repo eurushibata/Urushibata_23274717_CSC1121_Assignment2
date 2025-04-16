@@ -37,6 +37,7 @@
       <uxap:ObjectPageDynamicHeaderTitle>
         <uxap:heading>
           <!-- <core:Fragment fragmentName="dcu.ca2.view.fragments.Input" type="XML"/> -->
+           <Title text="CA2 - Image Search Engine - Mechanics of Search - Emerson Urushibata" />
         </uxap:heading>
       </uxap:ObjectPageDynamicHeaderTitle>
     </uxap:headerTitle>
@@ -47,7 +48,7 @@
     </uxap:headerContent>
 
     <uxap:sections>
-      <core:Fragment fragmentName="dcu.ca2.view.fragments.Content" type="XML"/>
+        <core:Fragment fragmentName="dcu.ca2.view.fragments.Content" type="XML"/>
       <!-- <core:Fragment fragmentName="sap.m.sample.InitialPagePattern.view.fragments.sections.IllustratedMessage" type="XML"/>
       <core:Fragment fragmentName="sap.m.sample.InitialPagePattern.view.fragments.sections.ProductsTable" type="XML"/>
       <core:Fragment fragmentName="sap.m.sample.InitialPagePattern.view.fragments.sections.SupplierDetails" type="XML"/> -->

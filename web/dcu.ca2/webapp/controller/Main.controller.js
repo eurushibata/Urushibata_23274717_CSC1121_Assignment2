@@ -22,12 +22,30 @@ sap.ui.define([
 		},
 
 		onSearchPress: async function (oEvent) {
-			const start = Date.now();
 			const query = this.byId("search_text").getValue();
+
+			if (!query) {
+				MessageBox.error("Please enter a search term");
+				return;
+			}
+			oEvent.getSource().setEnabled(false);
+			this.getView().byId("countdownText").setVisible(true);
+			const start = Date.now();
 			const algo = this.byId("search_algorithm").getSelectedKey();
 
 			const url = `/search/${algo}/${query}`;
+
+			const intervalFn = () => {
+			};
+			let initialStart = 0;
+			this.getModel().setProperty("/realtimeCountdown", 0.000);
+			const intervalExec = setInterval(() => {
+				initialStart = initialStart + 10;
+				this.getModel().setProperty("/realtimeCountdown", initialStart/1000);
+			}, 1 );
 			const response = await fetch(url);
+			clearInterval(intervalExec);
+			oEvent.getSource().setEnabled(true);
 			if (!response.ok) {
 				MessageBox.error("Error: " + response.statusText);
 				return;
@@ -43,14 +61,15 @@ sap.ui.define([
 			const end = Date.now();
 
 			const dataset = this.getModel().getProperty("/dataset");
-			const filters = [];
+			const filters = {};
 			for (const i in relevant_docs) {
 				const key = Object.keys(relevant_docs[i])[0];
-				// const value = relevant_docs[key];
-				filters.push(parseInt(key));
+				const value = relevant_docs[i][key]
+				filters[parseInt(key)] = value;
 			}
 			const query_results = dataset.filter((images) => {
-				if (filters.includes(images.page_id)) {
+				if (filters[images.page_id]) {
+					images.rankingPos = filters[images.page_id]
 					return true;
 				}
 				return false;
@@ -60,6 +79,8 @@ sap.ui.define([
 			this.getModel().setProperty("/ranking", relevant_docs);
 			this.getModel().setProperty("/results", query_results);
 			this.getModel().setProperty("/timeSpent", (end - start)/1000 + " seconds");
+			this.getModel().setProperty("/realtimeCountdown", (end - start)/1000);
+
 		},
 
 		onImagePress: function (oEvent) {
