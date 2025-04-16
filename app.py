@@ -10,6 +10,10 @@ from multiprocessing import Pool
 app = Flask(__name__,
              template_folder='web/dcu.ca2/webapp')
 
+ranking_bm25  = None
+ranking_vsm    = None
+ranking_vsm_q  = None
+
 @app.route("/")
 def hello():
   message = "Hello, World"
