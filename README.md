@@ -33,5 +33,5 @@ pkill gunicorn
 
 to start service with gunicorn
 ```
-gunicorn -w 1 app:app --daemon --log-file 1.logfile.log
+gunicorn -w 1 app:app --daemon --log-file 1.logfile.log --reload
 ```
