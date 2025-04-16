@@ -11,12 +11,14 @@ app = Flask(__name__,
              template_folder='web/dcu.ca2/webapp')
 
 def initialize_rankings():
-    global ranking_bm25, ranking_vsm, ranking_vsm_q  # Declare as global to modify them
-    collection = CorpusIndexer('./dataset/0.wikipedia.images.xml')
+  print("Rankings initialized")
+  global ranking_bm25, ranking_vsm, ranking_vsm_q  # Declare as global to modify them
+  collection = CorpusIndexer('./dataset/0.wikipedia.images.xml')
 
-    ranking_bm25 = RankingBM25(collection)
-    ranking_vsm = RankingVSM(collection)
-    ranking_vsm_q = RankingVSM_Q(collection)
+  ranking_bm25 = RankingBM25(collection)
+  ranking_vsm = RankingVSM(collection)
+  ranking_vsm_q = RankingVSM_Q(collection)
+  print("Rankings finished loading")
 
 @app.route("/")
 def hello():
