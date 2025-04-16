@@ -29,7 +29,7 @@ def hello():
 
 def search(algo, query):
   ranking = None
-  
+
   if (algo == "bm25"):
     ranking = ranking_bm25.query(query)
   elif (algo == "vsm"):
@@ -80,7 +80,8 @@ def initialize_ranking(args):
     ranking_class, collection = args
     return ranking_class(collection)
 
-if __name__ == "__main__":
-  initialize_rankings()
+initialize_rankings()
 
+# it is ignored by gunicorn
+if __name__ == "__main__":
   app.run(debug=True, port=8000)
