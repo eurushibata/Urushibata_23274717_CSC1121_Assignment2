@@ -90,7 +90,7 @@ if __name__ == "__main__":
   # for testing purpose, define the collection size
   # limit = 3 # any number or None
   limit = None
-  collection = CorpusIndexer('./dataset/0.wikipedia.images.xml', limit)
+  collection = CorpusIndexer('./dataset/manifest.xml', limit)
   ranking_vsm = RankingVSM_Q(collection)
 
   similarity = ranking_vsm.query(args.keywords)

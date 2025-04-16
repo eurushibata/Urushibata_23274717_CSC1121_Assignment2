@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import argparse
+import random
+import string
 import os
 import requests
 from bs4 import BeautifulSoup
@@ -50,12 +52,18 @@ def get_page_info(url):
                 # print(f"Image name too long: {image_name}")
                 return None
 
+            # Generate a new random image name with the same extension
+            _, extension = os.path.splitext(image_name)
+            random_name = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
+            new_image_name = random_name + extension
+
             content = page_content.find('div', id='mw-content-text').find_all('p')
             # print(f"Image URL: {image_url}")
             return {
                 "page_id": page_id,
                 "image_url": image_url,
-                "image_name": os.path.basename(image_url),
+                "image_name": image_name,
+                "new_image_name": new_image_name,
                 "wikipedia_source_url": url,
                 "title": title_text,
                 "content": content
@@ -76,18 +84,18 @@ def save_images(images):
     for img_url in images:
         download_image(img_url, DATASET_FOLDER)
 
-def save_image(img_url):
-    download_image(img_url, DATASET_FOLDER)
+def save_image(img_url, new_image_name):
+    download_image(img_url, new_image_name, DATASET_FOLDER)
         
-def download_image(img_url, folder, retry_count=0):
+def download_image(img_url, new_image_name, folder, retry_count=0):
     try:
         # print (f"START Downloading: {img_url}")
         headers = {'User-Agent': 'CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org)'}
         response = requests.get(img_url, stream=True, headers=headers)
         if response.status_code == 200:
             # Extract the image filename from the URL
-            filename = os.path.basename(img_url)
-            filepath = os.path.join(folder, filename)
+            # filename = os.path.basename(img_url)
+            filepath = os.path.join(folder, new_image_name)
             # print(f"Downloaded: {filename}")
 
             
@@ -101,7 +109,7 @@ def download_image(img_url, folder, retry_count=0):
             if retry_count < 2:
                 print(f"Retrying {img_url} ({retry_count + 1}/2)")
                 time.sleep(2)
-                download_image(img_url, folder, retry_count + 1)
+                download_image(img_url, new_image_name, folder, retry_count + 1)
     except Exception as e:
         print(f"Failed to download {img_url}: {e}")
 
@@ -109,7 +117,7 @@ def save_record_to_file(record, filename):
     page_id = record['page_id']
     title = record['title'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
     image_url = record['image_url'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-    image_name = record['image_name'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    image_name = record['new_image_name']
     wikipedia_source_url = record['wikipedia_source_url'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
     # content = record['content'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
     content_text = ""
@@ -161,12 +169,12 @@ def save_record_to_file_json(records, filename):
     with open(filename, 'w', encoding='utf-8') as file:
         json.dump(previous_records + records, file, indent=2, ensure_ascii=False)
 
-def main(n=IMAGE_COUNT):
+def crawler(n=IMAGE_COUNT):
     bar = IncrementalBar('Downloading', max=n)
     create_dataset_folder()
     images_fetched = set()
     images_fetched_json = []
-    export_file_name = "0.wikipedia.images.xml"
+    export_file_name = "manifest.xml"
     
     while len(images_fetched) < n:
         url = fetch_random_wikipedia_article()
@@ -174,13 +182,13 @@ def main(n=IMAGE_COUNT):
         content = get_page_info(url)
         if (content):
             if content['image_url'] not in images_fetched:
-                save_image(content['image_url'])
+                save_image(content['image_url'], content['new_image_name'])
                 images_fetched.add(content['image_url'])
                 # print(f"Downloaded: {image_url}")
                 save_record_to_file(content, export_file_name)
                 images_fetched_json.append(content)
                 bar.next()
-    save_record_to_file_json(images_fetched_json, "0.wikipedia.images.json")
+    save_record_to_file_json(images_fetched_json, "manifest.json")
     bar.finish()
 
 if __name__ == "__main__":
@@ -194,4 +202,4 @@ if __name__ == "__main__":
     parser.add_argument("n", help="Quantity of images to fetch",)
     args=parser.parse_args()
 
-    main(int(args.n))
+    crawler(int(args.n))

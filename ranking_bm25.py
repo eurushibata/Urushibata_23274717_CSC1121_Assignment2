@@ -54,7 +54,7 @@ if __name__ == "__main__":
   # for testing purpose, define the collection size
   # limit = 1000 # any number or None
   limit = None
-  collection = CorpusIndexer('./dataset/0.wikipedia.images.xml', limit)
+  collection = CorpusIndexer('./dataset/manifest.xml', limit)
   ranking_bm25 = RankingBM25(collection)
   
   similarity = ranking_bm25.query(args.keywords)

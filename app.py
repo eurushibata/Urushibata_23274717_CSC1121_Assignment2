@@ -5,7 +5,7 @@ from ranking_bm25 import RankingBM25
 from ranking_vsm import RankingVSM
 from ranking_vsm_q import RankingVSM_Q
 from corpus_indexer import CorpusIndexer
-from multiprocessing import Pool
+from crawler import crawler
 
 app = Flask(__name__,
              template_folder='web/dcu.ca2/webapp')
@@ -13,7 +13,7 @@ app = Flask(__name__,
 def initialize_rankings():
   print("Rankings initialized")
   global ranking_bm25, ranking_vsm, ranking_vsm_q  # Declare as global to modify them
-  collection = CorpusIndexer('./dataset/0.wikipedia.images.xml')
+  collection = CorpusIndexer('./dataset/manifest.xml')
 
   ranking_bm25 = RankingBM25(collection)
   ranking_vsm = RankingVSM(collection)
@@ -52,6 +52,9 @@ def search(algo, query):
   
   return response
 
+@app.route("/crawler/<no>")
+def crawler2(no):
+   crawler(int(no))
 
 @app.route("/flush")
 def flush():
@@ -60,7 +63,7 @@ def flush():
 
 @app.route("/dataset")
 def dataset():
-    dataset_path = os.path.join(app.root_path, 'dataset/0.wikipedia.images.json')
+    dataset_path = os.path.join(app.root_path, 'dataset/manifest.json')
     try:
         with open(dataset_path, 'r', encoding='utf-8') as file:
             data = json.load(file)  # Load JSON content
